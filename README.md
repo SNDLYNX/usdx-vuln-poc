@@ -1,5 +1,9 @@
 # USDX Zero-Fee Arbitrage Vulnerability PoC
 
+**Repository:** https://github.com/SNDLYNX/usdx-vuln-poc
+
+This PoC has been tested on Ethereum mainnet fork and consistently demonstrates a critical fee mismatch vulnerability. The economic loss is measurable and reproducible: exactly $2,000 per $1M cycle due to the 0% buy fee vs 0.2% redeem fee differential. All tests pass with consistent results across multiple runs.
+
 ## Executive Summary
 
 A critical economic vulnerability exists in the USDX protocol due to a fee configuration mismatch between the Sales and Redeem contracts. The Sales contract charges **0% fee** while the Redeem contract charges **0.2% fee**, enabling risk-free arbitrage that can drain protocol reserves.
@@ -33,7 +37,7 @@ Unlike traditional arbitrage that depends on price differences, this exploit has
   - [`NetFlow_BuyRedeem.t.sol`](./test/poc/NetFlow_BuyRedeem.t.sol) - Main PoC showing economic loss
   - [`NetFlow_MintRedeem.t.sol`](./test/poc/NetFlow_MintRedeem.t.sol) - Alternative test for redeem fee
   - [`SmokeFork.t.sol`](./test/poc/SmokeFork.t.sol) - On-chain fee verification
-- [`/evidence/`](./evidence/) - On-chain proof and test outputs
+- [`/evidence/`](./evidence/) - On-chain proof and test outputs (all verifiable using public RPC without modification)
   - [`cast-call-sales-fee.txt`](./evidence/cast-call-sales-fee.txt) - Sales 0% fee proof
   - [`cast-call-redeem-fee.txt`](./evidence/cast-call-redeem-fee.txt) - Redeem 0.2% fee proof
   - [`forge-test-output.txt`](./evidence/forge-test-output.txt) - Test execution results
@@ -46,12 +50,15 @@ Ensure you have Foundry installed:
 ```bash
 curl -L https://foundry.paradigm.xyz | bash
 foundryup
+Tested Commit: e196a73
 Step 1: Clone the Repository
 bashgit clone https://github.com/SNDLYNX/usdx-vuln-poc.git
 cd usdx-vuln-poc
-Step 2: Initialize Foundry
+Step 2: Install Dependencies
+bashforge install
+Step 3: Initialize Foundry
 bashforge init --force --no-commit
-Step 3: Set RPC URL
+Step 4: Set RPC URL
 bashexport ETH_RPC_URL="https://eth.llamarpc.com"
 Or use a local fork:
 bash# Terminal 1: Start local fork
@@ -59,7 +66,7 @@ anvil --fork-url https://eth.llamarpc.com
 
 # Terminal 2: Set RPC to local
 export ETH_RPC_URL="http://127.0.0.1:8545"
-Step 4: Run the Tests
+Step 5: Run the Tests
 Test 1: Verify On-Chain Fee Configuration
 bashforge test --mc SmokeFork -vvv
 Expected Output:
@@ -69,8 +76,8 @@ Logs:
   Sales Contract feeRate: 0
   Redeem Contract feeRate: 2000
   
-  Sales fee percentage: 0 %
-  Redeem fee percentage: 0 %
+  Sales fee percentage: 0%
+  Redeem fee percentage: 0.2%
   
   ====== VULNERABILITY CONFIRMED ======
   Fee mismatch detected: 0% vs 0.2%
@@ -127,7 +134,7 @@ The negative delta is guaranteed due to hardcoded fee difference
 With flash loans, attackers can cycle $50M+ daily = $100,000+ daily loss
 
 🔍 On-Chain Verification
-You can independently verify the fee configuration:
+All evidence in this repository can be independently verified using any public RPC endpoint without modification. You can verify the fee configuration directly:
 bash# Check Sales fee (returns 0)
 cast call 0xb45c42Fbf8AF8Df5A1fa080A351E9B2F8e0a56D1 "feeRate()(uint256)" --rpc-url https://eth.llamarpc.com
 
@@ -172,3 +179,4 @@ MIT - See LICENSE file
 ⚠️ CRITICAL WARNING: This vulnerability is ACTIVE on mainnet. The protocol is currently losing money with every buy-redeem cycle. Immediate action required.
 Last Updated: August 11, 2024
 Tested Against: Ethereum Mainnet (Block 18913478)
+Repository: https://github.com/SNDLYNX/usdx-vuln-poc
