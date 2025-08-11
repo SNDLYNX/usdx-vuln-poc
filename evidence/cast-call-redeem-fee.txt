@@ -1,0 +1,6 @@
+$ cast call 0x0eaF6FE1aeD8631114d1dE78317982CE73d82f7b "feeRate()(uint256)" --rpc-url https://eth.llamarpc.com
+
+2000
+
+# Interpretation: Redeem contract has 0.2% fee (2000/1000000)
+# This means redeeming USDX incurs a 0.2% fee

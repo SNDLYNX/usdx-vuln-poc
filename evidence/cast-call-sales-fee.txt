@@ -1,0 +1,6 @@
+$ cast call 0xb45c42Fbf8AF8Df5A1fa080A351E9B2F8e0a56D1 "feeRate()(uint256)" --rpc-url https://eth.llamarpc.com
+
+0
+
+# Interpretation: Sales contract has 0% fee (0/1000000)
+# This means buying USDX incurs no fees
