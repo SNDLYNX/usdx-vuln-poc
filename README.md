@@ -6,7 +6,7 @@ This PoC has been tested on Ethereum mainnet fork and consistently demonstrates 
 
 ## 🚀 Quick Start
 
-Run these commands to immediately verify the vulnerability:
+Run these commands to immediately verify the vulnerability. If the output shows `DELTA_USDT: -2000`, the vulnerability is confirmed - this means the protocol loses $2,000 for every $1M that flows through the buy-redeem cycle.
 
 ```bash
 # Clone and setup
@@ -64,7 +64,7 @@ Prerequisites
 Ensure you have Foundry installed:
 bashcurl -L https://foundry.paradigm.xyz | bash
 foundryup
-Tested Commit: e196a73
+Tested Commit: cf68f14
 Step 1: Clone the Repository
 bashgit clone https://github.com/SNDLYNX/usdx-vuln-poc.git
 cd usdx-vuln-poc
@@ -84,7 +84,7 @@ Step 5: Run the Tests
 Test 1: Verify On-Chain Fee Configuration
 bashforge test --mc SmokeFork -vvv
 Expected Output:
-[PASS] test_ReadFeeRates() (gas: 12345)
+text[PASS] test_ReadFeeRates() (gas: 12345)
 Logs:
   ====== ON-CHAIN FEE VERIFICATION ======
   Sales Contract feeRate: 0
@@ -99,7 +99,7 @@ Logs:
 Test 2: Demonstrate Economic Loss
 bashforge test --mc NetFlow_BuyRedeem -vvv
 Expected Output:
-[PASS] test_NetFlow_USDC_to_USDT() (gas: 45283)
+text[PASS] test_NetFlow_USDC_to_USDT() (gas: 45283)
 Logs:
   ====== NET FLOW ANALYSIS ======
   Sales fee: 0
@@ -119,7 +119,7 @@ Logs:
 Test 3: Verify Redeem Fee Impact
 bashforge test --mc NetFlow_MintRedeem -vvv
 Expected Output:
-[PASS] test_MintRedeem_NetFlow() (gas: 23456)
+text[PASS] test_MintRedeem_NetFlow() (gas: 23456)
 Logs:
   ====== MINT-REDEEM FLOW ANALYSIS ======
   USDX_to_redeem: 1000000000000000000000000
@@ -235,7 +235,7 @@ Every day of delay = more funds at risk
 For questions about this PoC:
 
 GitHub Issues: Create Issue
-Bug Bounty Program: [Submit via official channels]
+Bug Bounty Program: Submit via official channels
 
 License
 MIT - See LICENSE file
